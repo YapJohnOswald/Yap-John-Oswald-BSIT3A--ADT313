@@ -1,0 +1,93 @@
+.Login{
+  background: linear-gradient(135deg, #a3c1e0, #e0f7fa); /* Soft blue gradient */
+}
+
+.form-container {
+  padding: 3rem 2.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 400px;
+  width: 100%;
+  background-color: #fff;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.form-container:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.form-container > div {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.form-group label {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.errors {
+  color: #357abd;
+  font-size: 0.85rem;
+  margin-top: -8px;
+  margin-bottom: 8px;
+}
+
+.submit-container {
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.submit-container button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #4a90e2;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-container button:hover {
+  background-color: #357abd;
+}
+
+.register-container {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.show-password {
+  margin-top: -0.5rem;
+  font-size: 0.85rem;
+  color: #4a90e2;
+  cursor: pointer;
+  user-select: none;
+}
