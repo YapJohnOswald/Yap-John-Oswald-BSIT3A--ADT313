@@ -23,13 +23,10 @@ function Main() {
         <div className="navigation">
           <ul>
             <li>
-              <Link to="/main/dashboard">Dashboard</Link>
+              <div>Dashboard</div>
             </li>
             <li>
-              <Link to="/main/movie/form">Form</Link>
-            </li>
-            <li>
-              <Link to="/main/movie/lists">Lists</Link>
+              <Link to="/main/movie/lists">Movies</Link>
             </li>
             <li className="logout">
               <a onClick={handleLogout}>Logout</a>

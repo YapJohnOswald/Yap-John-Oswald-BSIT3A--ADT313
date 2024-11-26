@@ -49,7 +49,7 @@ const Lists = () => {
         <button
           type='button'
           onClick={() => {
-            navigate('/main/movies/form');
+            navigate('/main/movie/form');
           }}
         >
           Create new
@@ -73,7 +73,7 @@ const Lists = () => {
                   <button
                     type='button'
                     onClick={() => {
-                      navigate('/main/movies/form/' + movie.id);
+                      navigate('/main/movie/form/' + movie.id);
                     }}
                   >
                     Edit

@@ -3,9 +3,9 @@ import * as ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './index.css';
 import Login from './pages/Public/Login/Login';
+import Register from './pages/Public/Register/Register'; 
 import Dashboard from './pages/Main/Dashboard/Dashboard';
 import Main from './pages/Main/Main';
-import Register from './pages/Public/Register/Register'; 
 import Form from './pages/Main/Movie/Form/Form';
 import Lists from './pages/Main/Movie/Lists/Lists';
 
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: 'Movie/form',
+        path: 'Movie/form/:movieId?',
         element: <Form />,
       },
       {
