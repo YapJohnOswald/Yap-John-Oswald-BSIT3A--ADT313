@@ -40,7 +40,7 @@ const Lists = () => {
           //update list by requesting again to api
           // getMovies();
         });
-    }
+    }               
   };
 
   return (
@@ -49,7 +49,7 @@ const Lists = () => {
         <button
           type='button'
           onClick={() => {
-            navigate('/main/movie/form');
+            navigate('/main/movies/form');
           }}
         >
           Create new
@@ -73,7 +73,7 @@ const Lists = () => {
                   <button
                     type='button'
                     onClick={() => {
-                      navigate('/main/movie/form/' + movie.id);
+                      navigate('/main/movies/form/' + movie.id);
                     }}
                   >
                     Edit

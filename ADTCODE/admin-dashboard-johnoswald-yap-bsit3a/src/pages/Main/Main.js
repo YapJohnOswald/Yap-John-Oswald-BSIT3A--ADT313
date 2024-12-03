@@ -26,7 +26,7 @@ function Main() {
               <div>Dashboard</div>
             </li>
             <li>
-              <Link to="/main/movie/lists">Movies</Link>
+              <Link to="/main/movies/lists">Movies</Link>
             </li>
             <li className="logout">
               <a onClick={handleLogout}>Logout</a>

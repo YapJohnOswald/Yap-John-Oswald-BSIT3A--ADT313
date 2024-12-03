@@ -136,13 +136,13 @@ const Form = () => {
     try {
       await axios({
         method: movieId ? "patch" : "post",
-        url: movieId ? `/movie/${movieId}` : "/movie",
+        url: movieId ? `/movies/${movieId}` : "/movies",
         data: data,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      navigate("/main/movie");
+      navigate("/main/movies/lists");
     } catch (error) {
       const errorMessage = error.response?.data?.message || 
         "Unable to save the movie. Please try again later.";
@@ -160,7 +160,7 @@ const Form = () => {
       setError("");
 
       axios
-        .get(`/movie/${movieId}`)
+        .get(`/movies/${movieId}`)
         .then((response) => {
           setMovie(response.data);
           const tempData = {
