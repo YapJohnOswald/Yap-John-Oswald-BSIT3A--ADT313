@@ -1,58 +1,53 @@
-.Login{
-  background: linear-gradient(135deg, #a3c1e0, #e0f7fa); /* Soft blue gradient */
+.Login {
+  background: linear-gradient(135deg, #4a90e2, #e0f7fa); /* Soft blue gradient */
+  min-height: 100vh; /* Full height for background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form-container {
-  padding: 3rem 2.5rem;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  border: none; /* No border for a cleaner look */
+  border-radius: 12px; /* More rounded corners */
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Softer shadow */
   display: flex;
   flex-direction: column;
-  justify-content: center;
   max-width: 400px;
   width: 100%;
-  background-color: #fff;
-  transition: box-shadow 0.3s ease-in-out;
+  background-color: #ffffff; /* White background for contrast */
 }
 
 .form-container:hover {
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-}
-
-.form-container > div {
-  width: 100%;
-  margin-bottom: 1rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  margin-bottom: 1.5rem; /* More space between groups */
 }
 
 .form-group label {
-  font-size: 14px;
-  color: #333;
+  font-size: 16px; /* Slightly larger font */
+  color: #333; /* Darker text for better readability */
   margin-bottom: 0.5rem;
 }
 
 .form-group input {
-  padding: 0.75rem;
+  padding: 0.8rem; /* Increased padding */
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.2s;
+  border-radius: 8px; /* More rounded edges */
+  transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
 }
 
 .form-group input:focus {
-  border-color: #4a90e2;
+  border-color: #4a90e2; /* Highlight border on focus */
   outline: none;
-  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* Glow effect */
 }
 
 .errors {
-  color: #357abd;
+  color: #e74c3c; /* Bright red for errors */
   font-size: 0.85rem;
   margin-top: -8px;
   margin-bottom: 8px;
@@ -64,30 +59,33 @@
 }
 
 .submit-container button {
-  padding: 0.75rem 1.5rem;
+  padding: 0.8rem 1.5rem;
   font-size: 1rem;
   border: none;
-  border-radius: 4px;
-  background-color: #4a90e2;
+  border-radius: 8px; /* More rounded edges */
+  background-color: #4a90e2; /* Button color */
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s; /* Adding transform for effect */
+  width: 100%; /* Full width button */
 }
 
 .submit-container button:hover {
-  background-color: #357abd;
+  background-color: #357abd; /* Darken on hover */
+  transform: translateY(-2px); /* Lift effect on hover */
 }
 
 .register-container {
   text-align: center;
   margin-top: 1rem;
   font-size: 0.9rem;
+  color: #555; /* Slightly lighter text */
 }
 
 .show-password {
   margin-top: -0.5rem;
   font-size: 0.85rem;
-  color: #4a90e2;
+  color: #4a90e2; /* Color for show password */
   cursor: pointer;
   user-select: none;
 }

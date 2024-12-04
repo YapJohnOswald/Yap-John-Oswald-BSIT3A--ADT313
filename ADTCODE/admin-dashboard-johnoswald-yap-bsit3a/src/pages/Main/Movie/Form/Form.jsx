@@ -1,337 +1,329 @@
-import axios from "axios";
-import { useCallback, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import "./Form.css";
+import axios from 'axios';
+import { useCallback, useEffect, useState } from 'react';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
+import './Form.css';
 
 const Form = () => {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const [searchedMovieList, setSearchedMovieList] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(undefined);
   const [movie, setMovie] = useState(undefined);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const [formData, setFormData] = useState({
-    title: "",
-    overview: "",
-    popularity: "",
-    releaseDate: "",
-    voteAverage: "",
-  });
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  let { movieId } = useParams();
+  const [castAndCrew, setCastAndCrew] = useState(null);
+  const [photos, setPhotos] = useState(null);
+  const [videos, setVideos] = useState(null);
+  const [activeTab, setActiveTab] = useState('');
+  const [isEditing, setIsEditing] = useState(false);  // New state to track editing mode
   const navigate = useNavigate();
+  let { movieId } = useParams();
 
   const handleSearch = useCallback(() => {
-    setError("");
-    if (!query) {
-      setError("Please enter a search term");
-      return;
-    }
-
-    setIsLoading(true);
-    setSearchedMovieList([]);
-
     axios({
-      method: "get",
-      url: `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=${currentPage}`,
+      method: 'get',
+      url: `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`,
       headers: {
-        Accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5YTdiNmUyNGJkNWRkNjhiNmE1ZWFjZjgyNWY3NGY5ZCIsIm5iZiI6MTcyOTI5NzI5Ny4wNzMzNTEsInN1YiI6IjY2MzhlZGM0MmZhZjRkMDEzMGM2NzM3NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ZIX4EF2yAKl6NwhcmhZucxSQi1rJDZiGG80tDd6_9XI",
+        Accept: 'application/json',
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODdiOTZhNTU5NGMzYzNhYjRkOWUzZmJlNTA4Yzg2NCIsIm5iZiI6MTczMzI5OTUzNy44NjQsInN1YiI6IjY3NTAwZDUxODAxMmY5M2RiYzY5OTkwYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KP22hB-7wc6hofAB8Gklr9POQX_xhJUmQqi2UwPwa2o',
       },
-    })
-      .then((response) => {
-        if (response.data.results.length === 0) {
-          setError("No movies found matching your search");
-        } else {
-          setSearchedMovieList(response.data.results);
-          setTotalPages(response.data.total_pages);
-        }
-      })
-      .catch(() => {
-        setError("Unable to search movies at this time. Please try again later.");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [query, currentPage]);
-
-  useEffect(() => {
-    if (currentPage > 1) {
-      handleSearch();
-    }
-  }, [currentPage, handleSearch]);
+    }).then((response) => {
+      setSearchedMovieList(response.data.results);
+      console.log(response.data.results);
+    });
+  }, [query]);
 
   const handleSelectMovie = (movie) => {
     setSelectedMovie(movie);
-    setFormData({
-      title: movie.original_title,
-      overview: movie.overview,
-      popularity: movie.popularity,
-      releaseDate: movie.release_date,
-      voteAverage: movie.vote_average,
-    });
-    setError("");
   };
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-    setError("");
-  };
+  const handleSave = () => {
+    const accessToken = localStorage.getItem('accessToken');
+    console.log(accessToken);
+    if (selectedMovie === undefined) {
+      alert('Please search and select a movie.');
+    } else {
+      const data = {
+        tmdbId: selectedMovie.id,
+        title: selectedMovie.title,
+        overview: selectedMovie.overview,
+        popularity: selectedMovie.popularity,
+        releaseDate: selectedMovie.release_date,
+        voteAverage: selectedMovie.vote_average,
+        backdropPath: `https://image.tmdb.org/t/p/original/${selectedMovie.backdrop_path}`,
+        posterPath: `https://image.tmdb.org/t/p/original/${selectedMovie.poster_path}`,
+        isFeatured: 0,
+      };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      setCurrentPage(1);
-      handleSearch();
-    }
-  };
-
-  const validateForm = () => {
-    const errors = [];
-    if (!formData.title) errors.push("Title is required");
-    if (!formData.overview) errors.push("Overview is required");
-    if (!formData.releaseDate) errors.push("Release date is required");
-    if (!formData.popularity) errors.push("Popularity is required");
-    if (!formData.voteAverage) errors.push("Vote average is required");
-    if (!selectedMovie) errors.push("Please select a movie from search results");
-    return errors;
-  };
-
-  const handleSave = async () => {
-    const validationErrors = validateForm();
-    if (validationErrors.length > 0) {
-      setError(validationErrors.join(", "));
-      return;
-    }
-
-    setIsLoading(true);
-    setError("");
-
-    const accessToken = localStorage.getItem("accessToken");
-    if (!accessToken) {
-      setError("You must be logged in to perform this action");
-      setIsLoading(false);
-      return;
-    }
-
-    const data = {
-      tmdbId: selectedMovie.id,
-      title: formData.title,
-      overview: formData.overview,
-      popularity: parseFloat(formData.popularity),
-      releaseDate: formData.releaseDate,
-      voteAverage: parseFloat(formData.voteAverage),
-      backdropPath: `https://image.tmdb.org/t/p/original/${selectedMovie.backdrop_path}`,
-      posterPath: `https://image.tmdb.org/t/p/original/${selectedMovie.poster_path}`,
-      isFeatured: 0,
-    };
-
-    try {
-      await axios({
-        method: movieId ? "patch" : "post",
-        url: movieId ? `/movies/${movieId}` : "/movies",
+      const request = axios({
+        method: 'post',
+        url: '/movies',
         data: data,
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
-      });
-      navigate("/main/movies/lists");
-    } catch (error) {
-      const errorMessage = error.response?.data?.message || 
-        "Unable to save the movie. Please try again later.";
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
+      })
+        .then((saveResponse) => {
+          console.log(saveResponse);
+          alert('Success');
+        })
+        .catch((error) => console.log(error));
     }
   };
 
-  const handleUpdate = handleSave;
+  const handleEdit = () => {
+    setIsEditing(true);  // Enable editing mode
+  };
 
+  const handleCancelEdit = () => {
+    setIsEditing(false);  // Disable editing mode
+    // Revert to the original movie data (optional)
+    setSelectedMovie(movie);
+  };
+
+  // Fetch the movie details for viewing or editing
   useEffect(() => {
     if (movieId) {
-      setIsLoading(true);
-      setError("");
-
-      axios
-        .get(`/movies/${movieId}`)
-        .then((response) => {
-          setMovie(response.data);
-          const tempData = {
-            id: response.data.tmdbId,
-            original_title: response.data.title,
-            overview: response.data.overview,
-            popularity: response.data.popularity,
-            poster_path: response.data.posterPath.replace("https://image.tmdb.org/t/p/original/", ""),
-            release_date: response.data.releaseDate,
-            vote_average: response.data.voteAverage,
-          };
-          setSelectedMovie(tempData);
-          setFormData({
-            title: response.data.title,
-            overview: response.data.overview,
-            popularity: response.data.popularity,
-            releaseDate: response.data.releaseDate,
-            voteAverage: response.data.voteAverage,
-          });
-        })
-        .catch(() => {
-          setError("Unable to load movie details. Please try again later.");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      axios.get(`/movies/${movieId}`).then((response) => {
+        setMovie(response.data);
+        const tempData = {
+          id: response.data.tmdbId,
+          original_title: response.data.title,
+          overview: response.data.overview,
+          popularity: response.data.popularity,
+          poster_path: response.data.posterPath,
+          release_date: response.data.releaseDate,
+          vote_average: response.data.voteAverage,
+        };
+        setSelectedMovie(tempData);
+        console.log(response.data);
+      });
     }
   }, [movieId]);
 
+  // Fetch Cast & Crew
+  const fetchCastAndCrew = (movieId) => {
+    axios.get(`https://api.themoviedb.org/3/movie/${movieId}/credits`, {
+      headers: {
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODdiOTZhNTU5NGMzYzNhYjRkOWUzZmJlNTA4Yzg2NCIsIm5iZiI6MTczMzI5OTUzNy44NjQsInN1YiI6IjY3NTAwZDUxODAxMmY5M2RiYzY5OTkwYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KP22hB-7wc6hofAB8Gklr9POQX_xhJUmQqi2UwPwa2o',
+      },
+    })
+      .then((response) => setCastAndCrew(response.data));
+  };
+
+  // Fetch Photos
+  const fetchPhotos = (movieId) => {
+    axios.get(`https://api.themoviedb.org/3/movie/${movieId}/images`, {
+      headers: {
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODdiOTZhNTU5NGMzYzNhYjRkOWUzZmJlNTA4Yzg2NCIsIm5iZiI6MTczMzI5OTUzNy44NjQsInN1YiI6IjY3NTAwZDUxODAxMmY5M2RiYzY5OTkwYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KP22hB-7wc6hofAB8Gklr9POQX_xhJUmQqi2UwPwa2o',
+      },
+    })
+      .then((response) => setPhotos(response.data));
+  };
+
+  // Fetch Videos
+  const fetchVideos = (movieId) => {
+    axios.get(`https://api.themoviedb.org/3/movie/${movieId}/videos`, {
+      headers: {
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODdiOTZhNTU5NGMzYzNhYjRkOWUzZmJlNTA4Yzg2NCIsIm5iZiI6MTczMzI5OTUzNy44NjQsInN1YiI6IjY3NTAwZDUxODAxMmY5M2RiYzY5OTkwYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KP22hB-7wc6hofAB8Gklr9POQX_xhJUmQqi2UwPwa2o',
+      },
+    })
+      .then((response) => setVideos(response.data));
+  };
+
+  // Handle tab clicks
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (selectedMovie) {
+      switch (tab) {
+        case 'cast':
+          fetchCastAndCrew(selectedMovie.id);
+          break;
+        case 'photos':
+          fetchPhotos(selectedMovie.id);
+          break;
+        case 'videos':
+          fetchVideos(selectedMovie.id);
+          break;
+        default:
+          break;
+      }
+    }
+  };
+
   return (
     <>
-      <h1>{movieId !== undefined ? "Edit" : "Create"} Movie</h1>
-      {error && <div className="error-message">{error}</div>}
-      {isLoading && <div className="loading-message">Loading...</div>}
+      <h1>{movieId !== undefined ? (isEditing ? 'Edit ' : 'View ') : 'Create '} Movie</h1>
 
       {movieId === undefined && (
         <>
-          <div className="search-container">
-            Search Movie:{" "}
+          <div className='search-container'>
+            Search Movie:{' '}
             <input
-              type="text"
-              value={query}
-              onChange={(event) => {
-                setQuery(event.target.value);
-                setError("");
-              }}
-              onKeyPress={handleKeyPress}
-              placeholder="Enter movie title..."
-              disabled={isLoading}
+              type='text'
+              onChange={(event) => setQuery(event.target.value)}
             />
-            <button
-              type="button"
-              onClick={() => {
-                setCurrentPage(1);
-                handleSearch();
-              }}
-              disabled={isLoading || !query.trim()}
-            >
-              {isLoading ? "Searching..." : "Search"}
+            <button type='button' onClick={handleSearch}>
+              Search
             </button>
-            <div className="searched-movie">
+            <div className='searched-movie'>
               {searchedMovieList.map((movie) => (
-                <p 
-                  key={movie.id} 
-                  onClick={() => handleSelectMovie(movie)}
-                  className={selectedMovie?.id === movie.id ? "selected" : ""}
-                >
+                <p onClick={() => handleSelectMovie(movie)} key={movie.id}>
                   {movie.original_title}
                 </p>
               ))}
             </div>
-            {totalPages > 1 && (
-              <div className="pagination">
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1 || isLoading}
-                >
-                  Previous
-                </button>
-                <span>
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages || isLoading}
-                >
-                  Next
-                </button>
-              </div>
-            )}
           </div>
           <hr />
         </>
       )}
 
-      <div className="container">
-        <form onSubmit={(e) => e.preventDefault()}>
+      <div className='container'>
+        <form>
           {selectedMovie && (
             <img
-              className="poster-image"
+              className='poster-image'
               src={`https://image.tmdb.org/t/p/original/${selectedMovie.poster_path}`}
-              alt={formData.title}
+              alt={selectedMovie.original_title}
             />
           )}
-          <div className="field">
+          <div className='field'>
             Title:
             <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              disabled={isLoading}
-              required
+              type='text'
+              value={selectedMovie ? selectedMovie.original_title : ''}
+              disabled={!isEditing && movieId !== undefined}
+              onChange={(e) => setSelectedMovie({ ...selectedMovie, original_title: e.target.value })}
             />
           </div>
-          <div className="field">
+          <div className='field'>
             Overview:
             <textarea
               rows={10}
-              name="overview"
-              value={formData.overview}
-              onChange={handleInputChange}
-              disabled={isLoading}
-              required
-            />
-          </div>
-          <div className="field">
-            Popularity:
-            <input
-              type="number"
-              name="popularity"
-              value={formData.popularity}
-              onChange={handleInputChange}
-              disabled={isLoading}
-              step="0.1"
-            />
-          </div>
-          <div className="field">
-            Release Date:
-            <input
-              type="date"
-              name="releaseDate"
-              value={formData.releaseDate}
-              onChange={handleInputChange}
-              disabled={isLoading}
-              required
-            />
-          </div>
-          <div className="field">
-            Vote Average:
-            <input
-              type="number"
-              name="voteAverage"
-              value={formData.voteAverage}
-              onChange={handleInputChange}
-              disabled={isLoading}
-              step="0.1"
-              min="0"
-              max="10"
+              value={selectedMovie ? selectedMovie.overview : ''}
+              disabled={!isEditing && movieId !== undefined}
+              onChange={(e) => setSelectedMovie({ ...selectedMovie, overview: e.target.value })}
             />
           </div>
 
-          <button 
-            type="button" 
-            onClick={movieId ? handleUpdate : handleSave}
-            disabled={isLoading}
-          >
-            {isLoading ? "Saving..." : (movieId ? "Update" : "Save")}
-          </button>
+          <div className='field'>
+            Popularity:
+            <input
+              type='text'
+              value={selectedMovie ? selectedMovie.popularity : ''}
+              disabled={!isEditing && movieId !== undefined}
+              onChange={(e) => setSelectedMovie({ ...selectedMovie, popularity: e.target.value })}
+            />
+          </div>
+
+          <div className='field'>
+            Release Date:
+            <input
+              type='text'
+              value={selectedMovie ? selectedMovie.release_date : ''}
+              disabled={!isEditing && movieId !== undefined}
+              onChange={(e) => setSelectedMovie({ ...selectedMovie, release_date: e.target.value })}
+            />
+          </div>
+
+          <div className='field'>
+            Vote Average:
+            <input
+              type='text'
+              value={selectedMovie ? selectedMovie.vote_average : ''}
+              disabled={!isEditing && movieId !== undefined}
+              onChange={(e) => setSelectedMovie({ ...selectedMovie, vote_average: e.target.value })}
+            />
+          </div>
+
+          {movieId === undefined && (
+            <button type='button' onClick={handleSave}>
+              Save
+            </button>
+          )}
+
+          {movieId !== undefined && !isEditing && (
+            <button type='button' onClick={handleEdit}>
+              Edit
+            </button>
+          )}
+
+{movieId !== undefined && isEditing && (
+  <>
+    <button type='button' onClick={handleCancelEdit}>
+      Cancel
+    </button>
+    <button type='button' onClick={handleSave}>
+      Save
+    </button>
+  </>
+)}
+
         </form>
       </div>
+
+      {movieId !== undefined && selectedMovie && (
+        <div>
+          <hr />
+          <nav>
+            <ul className='tabs'>
+              <li onClick={() => handleTabClick('cast')} className={activeTab === 'cast' ? 'active' : ''}>Cast & Crews</li>
+              <li onClick={() => handleTabClick('videos')} className={activeTab === 'videos' ? 'active' : ''}>Videos</li>
+              <li onClick={() => handleTabClick('photos')} className={activeTab === 'photos' ? 'active' : ''}>Photos</li>
+            </ul>
+          </nav>
+
+          <div className='data-section'>
+            {activeTab === 'cast' && castAndCrew && (
+              <div>
+                <h3>Cast & Crew</h3>
+                <ul>
+                  {castAndCrew.cast.map((cast) => (
+                    <li key={cast.id}>{cast.name}</li>
+                  ))}
+                </ul>
+                <ul>
+                  {castAndCrew.crew.map((crew) => (
+                    <li key={crew.id}>{crew.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {activeTab === 'photos' && photos && photos.backdrops && (
+              <div>
+                <h3>Photos</h3>
+                <div>
+                  {photos.backdrops.map((photo) => (
+                    <img
+                      key={photo.file_path}
+                      src={`https://image.tmdb.org/t/p/original/${photo.file_path}`}
+                      alt="Movie Backdrop"
+                      style={{ width: '200px' }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'videos' && videos && (
+              <div>
+                <h3>Videos</h3>
+                <ul>
+                  {videos.results.map((video) => (
+                    <li key={video.id}>
+                      <a
+                        href={`https://www.youtube.com/watch?v=${video.key}`}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                      >
+                        {video.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 };

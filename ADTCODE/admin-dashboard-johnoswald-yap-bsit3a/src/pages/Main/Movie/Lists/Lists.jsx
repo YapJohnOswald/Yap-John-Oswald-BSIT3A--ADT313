@@ -2,17 +2,18 @@ import { useNavigate } from 'react-router-dom';
 import './Lists.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+
 const Lists = () => {
   const accessToken = localStorage.getItem('accessToken');
   const navigate = useNavigate();
   const [lists, setLists] = useState([]);
 
   const getMovies = () => {
-    //get the movies from the api or database
     axios.get('/movies').then((response) => {
       setLists(response.data);
     });
   };
+
   useEffect(() => {
     getMovies();
   }, []);
@@ -29,25 +30,21 @@ const Lists = () => {
           },
         })
         .then(() => {
-          //update list by modifying the movie list array
           const tempLists = [...lists];
           const index = lists.findIndex((movie) => movie.id === id);
-          if (index !== undefined || index !== -1) {
+          if (index !== undefined && index !== -1) {
             tempLists.splice(index, 1);
             setLists(tempLists);
           }
-
-          //update list by requesting again to api
-          // getMovies();
         });
-    }               
+    }
   };
 
   return (
-    <div className='lists-container'>
-      <div className='create-container'>
+    <div className="lists-container">
+      <div className="create-container">
         <button
-          type='button'
+          type="button"
           onClick={() => {
             navigate('/main/movies/form');
           }}
@@ -55,8 +52,8 @@ const Lists = () => {
           Create new
         </button>
       </div>
-      <div className='table-container'>
-        <table className='movie-lists'>
+      <div className="table-container">
+        <table className="movie-lists">
           <thead>
             <tr>
               <th>ID</th>
@@ -66,19 +63,19 @@ const Lists = () => {
           </thead>
           <tbody>
             {lists.map((movie) => (
-              <tr>
+              <tr key={movie.id}>
                 <td>{movie.id}</td>
                 <td>{movie.title}</td>
                 <td>
                   <button
-                    type='button'
+                    type="button"
                     onClick={() => {
                       navigate('/main/movies/form/' + movie.id);
                     }}
                   >
-                    Edit
+                    View & Edit
                   </button>
-                  <button type='button' onClick={() => handleDelete(movie.id)}>
+                  <button type="button" onClick={() => handleDelete(movie.id)}>
                     Delete
                   </button>
                 </td>
