@@ -9,7 +9,7 @@ import Movie from './pages/Main/Movie/Movie';
 import Lists from './pages/Main/Movie/Lists/Lists';
 import Form from './pages/Main/Movie/Form/Form';
 import Register from './pages/Public/Register/Register';
-
+import View from './pages/Main/Movie/View/View';
 
 
 const router = createBrowserRouter([
@@ -41,6 +41,10 @@ const router = createBrowserRouter([
           {
             path: '/main/movies/form/:movieId?',
             element: <Form />,
+          },
+          {
+            path: '/main/movies/view/:movieId?',
+            element: <View />,
           },
         ],
       },

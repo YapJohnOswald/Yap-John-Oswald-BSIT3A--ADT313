@@ -70,10 +70,18 @@ const Lists = () => {
                   <button
                     type="button"
                     onClick={() => {
+                      navigate('/main/movies/view/' + movie.id);
+                    }}
+                  >
+                    View
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
                       navigate('/main/movies/form/' + movie.id);
                     }}
                   >
-                    View & Edit
+                    Edit
                   </button>
                   <button type="button" onClick={() => handleDelete(movie.id)}>
                     Delete
