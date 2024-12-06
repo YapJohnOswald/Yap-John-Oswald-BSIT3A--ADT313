@@ -1,0 +1,19 @@
+.photo-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  
+  .mainphoto {
+    width: 100%;         /* Full width of its container */
+    max-width: 300px;   /* Maximum width for each photo */
+    height: auto;       /* Maintain aspect ratio */
+    margin: 10px;       /* Add spacing between images */
+    object-fit: cover;  /* Ensure the image covers the area if needed */
+  }
+
+  .video-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
