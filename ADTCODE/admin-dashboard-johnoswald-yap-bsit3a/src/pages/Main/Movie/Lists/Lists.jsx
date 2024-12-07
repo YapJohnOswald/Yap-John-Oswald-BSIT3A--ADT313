@@ -54,20 +54,21 @@ const Lists = () => {
       </div>
       <div className="table-container">
         <table className="movie-lists">
-          <thead>
+          <thead  className='topform'>
             <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>Actions</th>
+              <th className='llist'>ID</th>
+              <th className='llist'>Title</th>
+              <th className='llist'>Actions</th>
             </tr>
           </thead>
           <tbody>
             {lists.map((movie) => (
-              <tr key={movie.id}>
-                <td>{movie.id}</td>
-                <td>{movie.title}</td>
-                <td>
+              <tr className='llist' key={movie.id}>
+                <td className='llist' >{movie.id}</td>
+                <td className='llist' >{movie.title}</td>
+                <td className="vedbtn">
                   <button
+                    className='btn'
                     type="button"
                     onClick={() => {
                       navigate('/main/movies/view/' + movie.id);
@@ -76,6 +77,7 @@ const Lists = () => {
                     View
                   </button>
                   <button
+                    className='btn'
                     type="button"
                     onClick={() => {
                       navigate('/main/movies/form/' + movie.id);
@@ -83,7 +85,7 @@ const Lists = () => {
                   >
                     Edit
                   </button>
-                  <button type="button" onClick={() => handleDelete(movie.id)}>
+                  <button className='btn' type="button" onClick={() => handleDelete(movie.id)}>
                     Delete
                   </button>
                 </td>

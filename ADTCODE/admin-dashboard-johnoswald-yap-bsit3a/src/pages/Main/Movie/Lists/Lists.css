@@ -1,3 +1,4 @@
+/*background: radial-gradient(465px at -15.1% -25%, rgb(17, 130, 193) 0%, rgb(67, 166, 238) 49%, rgb(126, 203, 244) 90.2%);*/
 .lists-container {
   width: 100%;
   display: flex;
@@ -12,6 +13,37 @@
   width: 100%;
 }
 
+.movie-lists{
+  background-color: #AFEEEE;
+  border: double;
+  margin-bottom: 10px;
+}
+
+.topform{
+  border-color: black;
+  margin: 10px;
+}
+
 .table-container {
   text-align: center;
+}
+
+.vedbtn{
+  display: flex;
+} 
+
+.btn{
+  background-color: #6495ED;
+  color: black;
+  margin-right: 5px;
+}  
+
+.btn:hover {
+  background-color: blue;
+  transform: translateY(-1px);
+}
+
+.llist, .vedbtn{
+  border-bottom: 1px solid black;
+  border-right: 1px solid black;
 }
