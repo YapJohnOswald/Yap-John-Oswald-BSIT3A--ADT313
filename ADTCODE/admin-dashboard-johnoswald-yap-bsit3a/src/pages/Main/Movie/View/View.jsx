@@ -176,7 +176,9 @@ const View = () => {
       )}
 
       <div className='container'>
-        <form>
+      <div className='vcontainer'>
+      <div className='view'>
+        <form className='views'>
           {selectedMovie && (
             <img
               className='poster-image'
@@ -184,6 +186,7 @@ const View = () => {
               alt={selectedMovie.original_title}
             />
           )}
+          <div className='info'>
           <div className='field'>
             Title:
             <input
@@ -232,26 +235,19 @@ const View = () => {
               onChange={(e) => setSelectedMovie({ ...selectedMovie, vote_average: e.target.value })}
             />
           </div>
-
-          {movieId === undefined && (
-            <button type='button' onClick={handleSave}>
-              Save
-            </button>
-          )}
-
-
-
+          </div>
         </form>
+        </div>
       </div>
 
       {movieId !== undefined && selectedMovie && (
-        <div>
+        <div className='cnc'>
           <hr />
           <nav>
             <ul className='tabs'>
-              <li onClick={() => handleTabClick('cast')} className={activeTab === 'cast' ? 'active' : ''}>Cast & Crews</li>
-              <li onClick={() => handleTabClick('videos')} className={activeTab === 'videos' ? 'active' : ''}>Videos</li>
-              <li onClick={() => handleTabClick('photos')} className={activeTab === 'photos' ? 'active' : ''}>Photos</li>
+              <li onClick={() => handleTabClick('cast')} className='btn' id={activeTab === 'cast' ? 'active' : ''}>Cast & Crews</li>
+              <li onClick={() => handleTabClick('videos')} className='btn' id={activeTab === 'videos' ? 'active' : ''}>Videos</li>
+              <li onClick={() => handleTabClick('photos')} className='btn' id={activeTab === 'photos' ? 'active' : ''}>Photos</li>
             </ul>
           </nav>
 
@@ -308,7 +304,8 @@ const View = () => {
             )}
           </div>
         </div>
-      )}
+        
+      )}</div>
     </>
   );
 };

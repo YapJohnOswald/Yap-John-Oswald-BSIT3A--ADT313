@@ -1,0 +1,29 @@
+.container{
+    display: flex;
+}
+
+.views{
+    display: flex;
+}
+
+.info{
+    margin-left: 20px;
+}
+
+.cnc{
+    height: 50vh;
+    overflow-y: auto;
+    margin-left: 20px;
+}
+
+
+.btn{
+    background: #7CB9E8;
+    border-radius: 10%;
+    cursor: pointer;
+}
+
+.poster-image {
+    width: 200px;
+    height: auto;
+  }

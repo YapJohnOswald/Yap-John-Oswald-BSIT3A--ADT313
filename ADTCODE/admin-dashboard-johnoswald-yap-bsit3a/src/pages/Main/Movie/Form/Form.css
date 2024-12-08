@@ -8,12 +8,33 @@
 }
 
 .poster-image {
-  width: 150px;
+  width: 200px;
   height: auto;
+}
+
+.searchline{
+  display: flex;
+}
+
+.seachbtn, .searchs{
+  width: auto;
+  height: auto;
+}
+
+.searchpart{
+  overflow-y: auto;
 }
 
 .container {
   overflow: auto;
+}
+
+.display{
+  display: flex;
+}
+
+.edits{
+  margin-left: 20px;
 }
 
 nav {

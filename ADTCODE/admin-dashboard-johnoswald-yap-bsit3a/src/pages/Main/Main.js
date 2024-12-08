@@ -21,12 +21,12 @@ function Main() {
     <div className="Main">
       <div className="container">
         <div className="navigation">
-          <ul>
+          <ul className='lists'>
             <li>
-              <div>Dashboard</div>
+              <div className='rlists'>Dashboard</div>
             </li>
             <li>
-              <Link to="/main/movies/lists">Movies</Link>
+              <Link className='rlists' to="/main/movies/lists">Movies</Link>
             </li>
             <li className="logout">
               <a onClick={handleLogout}>Logout</a>

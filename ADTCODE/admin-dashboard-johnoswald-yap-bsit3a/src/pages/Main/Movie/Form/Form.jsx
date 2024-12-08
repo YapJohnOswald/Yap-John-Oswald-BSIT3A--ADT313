@@ -39,7 +39,7 @@ const Form = () => {
       headers: {
         Accept: "application/json",
         Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5YTdiNmUyNGJkNWRkNjhiNmE1ZWFjZjgyNWY3NGY5ZCIsIm5iZiI6MTcyOTI5NzI5Ny4wNzMzNTEsInN1YiI6IjY2MzhlZGM0MmZhZjRkMDEzMGM2NzM3NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.ZIX4EF2yAKl6NwhcmhZucxSQi1rJDZiGG80tDd6_9XI",
+          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJkODdiOTZhNTU5NGMzYzNhYjRkOWUzZmJlNTA4Yzg2NCIsIm5iZiI6MTczMzI5OTUzNy44NjQsInN1YiI6IjY3NTAwZDUxODAxMmY5M2RiYzY5OTkwYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.KP22hB-7wc6hofAB8Gklr9POQX_xhJUmQqi2UwPwa2o",
       },
     })
       .then((response) => {
@@ -191,7 +191,7 @@ const Form = () => {
   }, [movieId]);
 
   return (
-    <>
+    <div className="searchpart">
       <h1>{movieId !== undefined ? "Edit" : "Create"} Movie</h1>
       {error && <div className="error-message">{error}</div>}
       {isLoading && <div className="loading-message">Loading...</div>}
@@ -199,8 +199,10 @@ const Form = () => {
       {movieId === undefined && (
         <>
           <div className="search-container">
+            <div className="searchline">
             Search Movie:{" "}
-            <input
+            <input 
+              className="searchs"
               type="text"
               value={query}
               onChange={(event) => {
@@ -213,6 +215,7 @@ const Form = () => {
             />
             <button
               type="button"
+              className="seachbtn"
               onClick={() => {
                 setCurrentPage(1);
                 handleSearch();
@@ -221,6 +224,7 @@ const Form = () => {
             >
               {isLoading ? "Searching..." : "Search"}
             </button>
+            </div>
             <div className="searched-movie">
               {searchedMovieList.map((movie) => (
                 <p 
@@ -232,32 +236,13 @@ const Form = () => {
                 </p>
               ))}
             </div>
-            {totalPages > 1 && (
-              <div className="pagination">
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                  disabled={currentPage === 1 || isLoading}
-                >
-                  Previous
-                </button>
-                <span>
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button
-                  onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                  disabled={currentPage === totalPages || isLoading}
-                >
-                  Next
-                </button>
-              </div>
-            )}
           </div>
           <hr />
         </>
       )}
 
       <div className="container">
-        <form onSubmit={(e) => e.preventDefault()}>
+        <form className="display" onSubmit={(e) => e.preventDefault()}>
           {selectedMovie && (
             <img
               className="poster-image"
@@ -265,6 +250,7 @@ const Form = () => {
               alt={formData.title}
             />
           )}
+          <div className="edits">
           <div className="field">
             Title:
             <input
@@ -330,9 +316,10 @@ const Form = () => {
           >
             {isLoading ? "Saving..." : (movieId ? "Update" : "Save")}
           </button>
+          </div>
         </form>
       </div>
-    </>
+    </div>
   );
 };
 

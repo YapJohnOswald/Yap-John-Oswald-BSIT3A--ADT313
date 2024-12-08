@@ -4,6 +4,7 @@
   overflow: hidden;
   max-height: 100vh;
 }
+
 .Main .container {
   display: flex;
   width: 100vw;
@@ -14,14 +15,26 @@
 }
 .Main .container .navigation {
   background-color: aliceblue;
-  padding-top: 40px;
+  padding-top: 0px;
   height: 100vh;
+  top: -10px;
+  position: relative;
 }
 
 .navigation{  
   display: flex;
+  margin-top: 10px;
+}
+
+.lists{
+  position: relative;
+  background: #662d91;
+  display: flex;
   flex-direction: column;
-  align-items: stretch;
+}
+
+.rlists{
+  color: black;
 }
 
 .Main .container .navigation ul {
